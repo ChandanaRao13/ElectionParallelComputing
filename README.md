@@ -1,0 +1,2 @@
+# ElectionParallelComputing
+OpenMP 
