@@ -132,12 +132,12 @@ std::map<std::string, int> AssignSeatsToState(){
       	
       	// TO DO:  change 50 to states.length
       	
-      	//#pragma omp parallel for num_threads(32) 			
+      	#pragma omp parallel for num_threads(32) 			
         for(int i=0; i< 50;i++){
         	
         	string winnerOfTheState = voteCounterMethod(states[i]);
         	
-        	//#pragma omp critical(updateCount)        
+        	#pragma omp critical(updateCount)        
             if(winnerOfTheState == " 0")
             	candidates[0] = candidates[0]+StateToSeatsMap[states[i]];
             else if(winnerOfTheState == " 1")
