@@ -181,3 +181,20 @@ extern "C" {
     USElectionManager* USElectionManager_new(){ return new USElectionManager(); }
     void USElectionManager_VoteCountingProccess(USElectionManager* uselection, int number_of_counters, char* candidate1, char* candidate2, char* candidate3){ uselection->USElectionManager_VoteCountingProccess(number_of_counters, candidate1, candidate2, candidate3); }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
