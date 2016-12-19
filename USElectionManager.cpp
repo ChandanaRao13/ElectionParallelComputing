@@ -70,7 +70,11 @@ class USElectionManager{
 	private:
 		std::map<std::string, int> AssignSeatsToState(){
 			std::map<std::string, int> map;
-			map["Alabama.csv"]=9;
+			 #pragma omp parallel sections // starts a new team
+ 			{
+			
+			#pragma omp section
+   			{ map["Alabama.csv"]=9;
 			map["New Jersey.csv"]=15;
 			map["Alaska.csv"]=3;
 			map["New Mexico.csv4"]=5;
@@ -83,8 +87,9 @@ class USElectionManager{
 			map["Colorado.csv"]=9;
 			map["Ohio.csv"]=20;
 			map["Connecticut.csv"]=7;
-			map["Oklahoma.csv"]=7;
-			map["Delaware.csv"]=3;
+			map["Oklahoma.csv"]=7;}
+			#pragma omp section
+   			{ map["Delaware.csv"]=3;
 			map["Oregon.csv"]=7;
 			map["District of Columbia.csv"]=5;
 			map["Pennsylvania.csv"]=21;
@@ -98,8 +103,9 @@ class USElectionManager{
 			map["South Dakota.csv"]=3;
 			map["Indiana.csv"]=11;
 			map["Tennessee.csv"]=11;
-			map["Iowa.csv"]=7;
-			map["Texas.csv"]=34;
+			map["Iowa.csv"]=7;}
+			#pragma omp section
+   			{ map["Texas.csv"]=34;
 			map["Kansas.csv"]=6;
 			map["Utah.csv"]=5;
 			map["Kentucky.csv"]=8;
@@ -109,8 +115,9 @@ class USElectionManager{
 			map["Maine.csv"]=4;
 			map["Washington.csv"]=11;
 			map["Maryland.csv"]=3;
-			map["West Virginia.csv"]=5;
-			map["Massachusetts.csv"]=12;
+			map["West Virginia.csv"]=5;}
+			#pragma omp section
+   			{ map["Massachusetts.csv"]=12;
 			map["Wisconsin.csv"]=10;
 			map["Michigan.csv"]=17;
 			map["Wyoming.csv"]=3;
@@ -120,8 +127,8 @@ class USElectionManager{
 			map["Montana.csv"]=3;
 			map["Nebraska.csv"]=5;
 			map["Nevada.csv"]=5;
-			map["New Hampshire.csv"]=4;	
-	
+			map["New Hampshire.csv"]=4;	}
+			}
 			return map;
 		}
 
@@ -139,8 +146,8 @@ class USElectionManager{
 		auto dt_s = high_resolution_clock::now();
 
 		// TO DO:  change 50 to states.length
-
-		#pragma omp parallel for num_threads(number_of_counters) 			
+		//#pragma omp parallel for num_threads(16) reduction(+:candidates)
+		#pragma omp parallel for num_threads(number_of_counters) reduction(+:candidates)			
 		for(int i=0; i< 50;i++){
 			string winnerOfTheState = voteCounterMethod(states[i]);
 			#pragma omp critical(updateCount)        
@@ -157,7 +164,8 @@ class USElectionManager{
 		auto dt = duration_cast<nanoseconds> (high_resolution_clock::now() - dt_s);
 		
 		// TO DO: change 3 to candidate's length
-		for(int index = 0; index < 3;index++){
+		int index;
+		for(index = 0; index < 3;index++){
 			if(candidates[index] >=260){
 				if(index == 0)
 					std::cout << "\n The New President of United States Of America is " << candidate1 << " !!!!!!!\n";
@@ -172,7 +180,7 @@ class USElectionManager{
 				std::cout << "\n There is tie !!! \n";
 			}	
 		}
-	
+		std::cout << "The total number of seats won: " << candidates[index] << "\n";
 		std::cout << "\ndt = " << dt.count() << " ns" << "\n";
 	}
 };
